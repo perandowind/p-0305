@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +41,15 @@ public class PostController {
     // GetMapping 요청이면 -> 중복경우처리를 안할 수 있음(다른 개발자가 볼때)
     @PostMapping("/posts/write")
     @ResponseBody
-    public String write(@Valid @ModelAttribute WriteRequestForm form) {
+    public String write(@Valid @ModelAttribute WriteRequestForm form, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+
+            String fieldName = bindingResult.getFieldError().getField();
+            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+
+            return getWriteForm(errorMessage, form.title, form.content, fieldName);
+        }
 
         Post post = postService.write(form.title, form.content);
 
