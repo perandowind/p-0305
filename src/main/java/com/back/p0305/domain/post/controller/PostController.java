@@ -2,6 +2,7 @@ package com.back.p0305.domain.post.controller;
 
 import com.back.p0305.domain.post.entity.Post;
 import com.back.p0305.domain.post.service.PostService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -26,20 +26,22 @@ public class PostController {
         return getWriteForm("", "", "", "");
     }
 
+    public static class WriteRequestForm {
+        @NotBlank
+        @Size(min=2, max=10)
+        String title;
+
+        @NotBlank
+        @Size(min=2, max=100)
+        String content;
+    }
+
+    // GetMapping 요청이면 -> 중복경우처리를 안할 수 있음(다른 개발자가 볼때)
     @PostMapping("/posts/write")
     @ResponseBody
-    public String write(
-            @RequestParam
-            @NotBlank
-            @Size(min=2, max=10)
-            String title,
+    public String write(@Valid WriteRequestForm form) {
 
-            @NotBlank
-            @Size(min=2, max=100)
-            String content) {
-
-        // GetMapping 요청이라 중복 경우 처리를 안할 수 있음(다른 개발자가 볼때)
-        Post post = postService.write(title, content);
+        Post post = postService.write(form.title, form.content);
 
         return "%d번 글이 작성되었습니다.".formatted(post.getId());
     }
