@@ -5,16 +5,16 @@ import com.back.p0305.domain.post.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
-@Validated
 public class PostController {
 
     private final PostService postService;
@@ -26,20 +26,21 @@ public class PostController {
         return getWriteForm("", "", "", "");
     }
 
+    @AllArgsConstructor
     public static class WriteRequestForm {
         @NotBlank
         @Size(min=2, max=10)
-        String title;
+        private String title;
 
         @NotBlank
         @Size(min=2, max=100)
-        String content;
+        private String content;
     }
 
     // GetMapping 요청이면 -> 중복경우처리를 안할 수 있음(다른 개발자가 볼때)
     @PostMapping("/posts/write")
     @ResponseBody
-    public String write(@Valid WriteRequestForm form) {
+    public String write(@Valid @ModelAttribute WriteRequestForm form) {
 
         Post post = postService.write(form.title, form.content);
 
