@@ -9,11 +9,7 @@
 </ul>
 <form method="post" action="/posts/write" th:object="${form}">
 
-    <ul th:if="${#fields.hasAnyErrors()}" style="color:red">
-        <li th:each="err : ${#fields.allErrors().stream().sorted()}"
-            th:text="${err.split('-')[2]}"
-            th:data-error-field="${err.split('-')[1]}"></li>
-    </ul>
+    <div th:replace="form_errors::formErrorsFrangment"></div>
 
     <div>
         <label for="title">제목</label>
@@ -30,14 +26,6 @@
     <input type="submit" value="작성">
 </form>
 
-<script>
-    const li = document.querySelector("ul li");
-    const errorFieldName = li.dataset.errorField;
 
-    if(errorFieldName.length > 0) {
-        const form = document.querySelector("form");
-        form[errorFieldName].focus();
-    }
-</script>
 </body>
 </html>
