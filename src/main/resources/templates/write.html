@@ -8,6 +8,11 @@
 <ul style="color:red" th:utext="${errorMessages}">
 </ul>
 <form method="post" action="/posts/write" th:object="${form}">
+
+    <ul th:if="${#fields.hasAnyErrors()}" style="color:red">
+        <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+    </ul>
+
     <div>
         <label for="title">제목</label>
         <div>
