@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="formErrorsFrangment">
+<th:block th:fragment="formErrorsFrangment">
     <ul th:if="${#fields.hasAnyErrors()}" style="color:red">
         <li th:each="err : ${#fields.allErrors().stream().sorted()}"
             th:text="${err.split('-')[2]}"
@@ -23,7 +23,7 @@
             }, 1);
         }
     </script>
-</div>
+</th:block>
 
 </body>
 </html>
