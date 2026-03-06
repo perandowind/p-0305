@@ -65,7 +65,7 @@ public class PostController {
 
         // 템플릿 응답
         model.addAttribute("id", post.getId());
-        return "redirect:/posts/write"; // 주소창을 바꿔
+        return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔
     }
 
     // 상세'조회 -> GET요청'
