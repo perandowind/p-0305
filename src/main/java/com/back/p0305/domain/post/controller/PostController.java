@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -64,7 +65,17 @@ public class PostController {
 
         // 템플릿 응답
         model.addAttribute("id", post.getId());
-        return "writeDone";
+        return "redirect:/posts/write"; // 주소창을 바꿔
     }
+
+    // 상세'조회 -> GET요청'
+    @GetMapping("/posts/{id}")
+    public String detail(@PathVariable int id, Model model) {
+        Post post = postService.findById(id).get();
+        model.addAttribute("post", post);
+
+        return "detail";
+    }
+
 
 }
