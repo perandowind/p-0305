@@ -24,7 +24,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/posts/write-form")
-    public String writeForm() {
+    public String writeForm(@ModelAttribute("form") WriteRequestForm form) {
         return "write";
     }
 
