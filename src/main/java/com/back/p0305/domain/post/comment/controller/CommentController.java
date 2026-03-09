@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,12 +35,14 @@ public class CommentController {
     @Transactional
     public String writeComment(@PathVariable int postId,
                                @Valid WriteRequestForm form,
-                               BindingResult bindingResult) {
+                               BindingResult bindingResult,
+                               Model model) {
+        Post post = postService.findById(postId).get();
         if (bindingResult.hasErrors()) {
+            model.addAttribute("post", post);
             return "detail";
         }
 
-        Post post = postService.findById(postId).get();
         post.addComment(form.content);
 
         return "redirect:/posts/%d".formatted(post.getId());
