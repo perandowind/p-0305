@@ -11,11 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/posts")
 @Controller
 @RequiredArgsConstructor
 public class PostController {
@@ -35,12 +33,12 @@ public class PostController {
 
     }
 
-    @GetMapping("/posts/write")
+    @GetMapping("/write")
     public String writeForm(@ModelAttribute("form") WriteRequestForm form) {
         return "write";
     }
 
-    @PostMapping("/posts/write")
+    @PostMapping("/write")
     public String write(@ModelAttribute("form") @Valid WriteRequestForm form, BindingResult bindingResult,
                         Model model) {
 
@@ -62,14 +60,11 @@ public class PostController {
         }
 
         Post post = postService.write(form.title, form.content);
-
-        // 템플릿 응답
-        model.addAttribute("id", post.getId());
-        return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔
+        return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔, GET 요청
     }
 
     // 상세'조회 -> GET요청'
-    @GetMapping("/posts/{id}")
+    @GetMapping("/{id}")
     public String detail(@PathVariable int id, Model model) {
         Post post = postService.findById(id).get();
         model.addAttribute("post", post);
