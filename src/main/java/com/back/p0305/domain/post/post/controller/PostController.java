@@ -92,6 +92,7 @@ public class PostController {
 
 
 
+
     @GetMapping("")
     @Transactional(readOnly = true)
     public String list(Model model) {
