@@ -1,8 +1,7 @@
-package com.back.p0305.domain.post.controller;
+package com.back.p0305.domain.post.post.controller;
 
-import com.back.p0305.domain.post.entity.Post;
-import com.back.p0305.domain.post.service.PostService;
-import jakarta.transaction.Transactional;
+import com.back.p0305.domain.post.post.entity.Post;
+import com.back.p0305.domain.post.post.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -10,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +35,7 @@ public class PostController {
     }
 
     @GetMapping("/write")
+    @Transactional(readOnly = true)
     public String writeForm(@ModelAttribute("form") WriteRequestForm form) {
         return "write";
     }
@@ -65,6 +66,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}/modify")
+    @Transactional(readOnly = true)
     public String modifyForm(@PathVariable int id, @ModelAttribute("form") ModifyRequestForm form) {
         Post post = postService.findById(id).get();
 
@@ -91,6 +93,7 @@ public class PostController {
 
 
     @GetMapping("")
+    @Transactional(readOnly = true)
     public String list(Model model) {
 
         model.addAttribute("posts", postService.findAll());
@@ -99,6 +102,7 @@ public class PostController {
 
     // 상세'조회 -> GET요청'
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public String detail(@PathVariable int id, Model model) {
         Post post = postService.findById(id).get();
         model.addAttribute("post", post);

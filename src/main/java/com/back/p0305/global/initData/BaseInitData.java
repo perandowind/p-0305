@@ -1,6 +1,6 @@
 package com.back.p0305.global.initData;
 
-import com.back.p0305.domain.post.service.PostService;
+import com.back.p0305.domain.post.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;

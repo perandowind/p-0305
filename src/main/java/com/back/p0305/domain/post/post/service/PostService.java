@@ -1,7 +1,7 @@
-package com.back.p0305.domain.post.service;
+package com.back.p0305.domain.post.post.service;
 
-import com.back.p0305.domain.post.entity.Post;
-import com.back.p0305.domain.post.repository.PostRepository;
+import com.back.p0305.domain.post.post.entity.Post;
+import com.back.p0305.domain.post.post.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
