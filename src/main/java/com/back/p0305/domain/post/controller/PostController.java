@@ -63,6 +63,13 @@ public class PostController {
         return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔, GET 요청
     }
 
+    @GetMapping("")
+    public String list(Model model) {
+
+        model.addAttribute("posts", postService.findAll());
+        return "list";
+    }
+
     // 상세'조회 -> GET요청'
     @GetMapping("/{id}")
     public String detail(@PathVariable int id, Model model) {
