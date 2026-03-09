@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -37,5 +38,11 @@ public class CommentController {
         Post post = postService.findById(postId).get();
         post.addComment(form.content);
         return "redirect:/posts/%d".formatted(post.getId());
+    }
+
+    @GetMapping("/posts/{postId}/comments/{commentId}/delete")
+    public String delete(@PathVariable int postId, @PathVariable int commentId) {
+        Post post = postService.findById(postId).get();
+
     }
 }

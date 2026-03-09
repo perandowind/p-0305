@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -46,11 +47,22 @@ public class Post extends BaseEntity {
         return comment;
     }
 
+    // 댓글 조회
+    public Optional<Comment> findCommentById(int commentId) {
+        return comments.stream()
+                .filter(c -> c.getId() == commentId)
+                .findFirst();
+    }
+
+
+    // 댓글 삭제
+
+
+
 
     // 댓글 수정
 
 
-    // 댓글 삭제
 
 
 }
