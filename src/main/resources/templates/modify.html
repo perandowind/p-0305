@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul style="color:red" th:utext="${errorMessages}">
+</ul>
+<form method="post" th:object="${form}">
+
+    <th:block th:replace="form_errors::formErrorsFrangment"></th:block>
+    <div>
+        <label for="title">제목</label>
+        <div>
+            <input type="text" th:field="*{title}" placeholder="제목을 입력해주세요." autoFocus>
+        </div>
+    </div>
+    <div>
+        <label for="content">내용</label>
+        <div>
+            <textarea th:field="*{content}" placeholder="내용을 입력해주세요." ></textarea>
+        </div>
+    </div>
+    <input type="submit" value="작성">
+</form>
+</body>
+</html>

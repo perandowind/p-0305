@@ -2,6 +2,7 @@ package com.back.p0305.domain.post.controller;
 
 import com.back.p0305.domain.post.entity.Post;
 import com.back.p0305.domain.post.service.PostService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -39,29 +40,55 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    public String write(@ModelAttribute("form") @Valid WriteRequestForm form, BindingResult bindingResult,
-                        Model model) {
+    public String write(@ModelAttribute("form") @Valid WriteRequestForm form,
+                        BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
-
-//            String errorMessages = bindingResult.getFieldErrors()
-//                    .stream()
-//                    .map((fieldError) -> fieldError.getField() + "-" + fieldError.getDefaultMessage())
-//                    .map((message) -> {
-//                        String[] bits = message.split("-"); // [field, 1, errorMessage]
-//                        return "<!-- %s --> <li data-error-field=\"%s\">%s</li>".formatted(bits[1], bits[0], bits[2]);
-//                    })
-//                    .sorted()
-//                    .collect(Collectors.joining("\n"));
-//
-//            // 템플릿 응답
-//            model.addAttribute("errorMessages", errorMessages);
             return "write";
         }
 
         Post post = postService.write(form.title, form.content);
         return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔, GET 요청
     }
+
+    @AllArgsConstructor
+    @Getter
+    public static class ModifyRequestForm {
+
+        @Size(min=2, max=10, message = "03-title-제목은 2자 이상 10자 이하로 입력해주세요.")
+        @NotBlank(message = "01-title-제목은 필수입니다.")
+        private String title;
+        @NotBlank(message = "02-content-내용은 필수입니다.")
+        @Size(min=2, max=100, message = "04-content-내용은 2자 이상 100자 이하로 입력해주세요.")
+        private String content;
+
+    }
+
+    @GetMapping("/{id}/modify")
+    public String modifyForm(@PathVariable int id, @ModelAttribute("form") ModifyRequestForm form) {
+        Post post = postService.findById(id).get();
+
+        form.title = post.getTitle();
+        form.content = post.getContent();
+
+        return "modify";
+    }
+
+    @PostMapping("/{id}/modify")
+    @Transactional
+    public String modify(@PathVariable int id,
+                         @ModelAttribute("form") @Valid WriteRequestForm form,
+                         BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return "modify";
+        }
+
+        Post post = postService.modify(id, form.title, form.content);
+        return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔, GET 요청
+    }
+
+
 
     @GetMapping("")
     public String list(Model model) {
