@@ -68,7 +68,7 @@ public class PostController {
         return "modify";
     }
 
-    @PostMapping("/{id}/modify")
+    @PutMapping("/{id}/modify")
     @Transactional
     public String modify(@PathVariable int id,
                          @ModelAttribute("form") @Valid WriteRequestForm form,
@@ -80,6 +80,12 @@ public class PostController {
 
         Post post = postService.modify(id, form.title, form.content);
         return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔, GET 요청
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable int id) {
+        postService.deleteById(id);
+        return "redirect:/posts";
     }
 
 
