@@ -7,7 +7,7 @@
 <body>
 <ul style="color:red" th:utext="${errorMessages}">
 </ul>
-<form method="post" th:object="${form}">
+<form method="post" th:action="@{/posts/{id}(id=${post.id})}" th:object="${form}">
     <input type="hidden" name="_method" value="PUT">
     <th:block th:replace="form_errors::formErrorsFrangment"></th:block>
     <div>
@@ -22,7 +22,7 @@
             <textarea th:field="*{content}" placeholder="내용을 입력해주세요." ></textarea>
         </div>
     </div>
-    <input type="submit" value="작성">
+    <input type="submit" value="수정">
 </form>
 </body>
 </html>
