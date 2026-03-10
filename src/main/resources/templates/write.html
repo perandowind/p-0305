@@ -7,7 +7,7 @@
 <body>
 <ul style="color:red" th:utext="${errorMessages}">
 </ul>
-<form method="post" th:object="${form}">
+<form method="post" th:action th:object="${form}">
 
     <th:block th:replace="form_errors::formErrorsFrangment"></th:block>
     <div>
