@@ -5,8 +5,6 @@ import com.back.p0305.domain.post.post.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,17 +19,14 @@ public class PostController {
 
     private final PostService postService;
 
-    @AllArgsConstructor
-    @Getter
-    public static class WriteRequestForm {
-
-        @Size(min=2, max=10, message = "03-title-제목은 2자 이상 10자 이하로 입력해주세요.")
-        @NotBlank(message = "01-title-제목은 필수입니다.")
-        private String title;
-        @NotBlank(message = "02-content-내용은 필수입니다.")
-        @Size(min=2, max=100, message = "04-content-내용은 2자 이상 100자 이하로 입력해주세요.")
-        private String content;
-
+    record WriteRequestForm(
+            @Size(min = 2, max = 10, message = "03-title-제목은 2자 이상 10자 이하로 입력해주세요.")
+            @NotBlank(message = "01-title-제목은 필수입니다.")
+            String title,
+            @NotBlank(message = "02-content-내용은 필수입니다.")
+            @Size(min = 2, max = 100, message = "04-content-내용은 2자 이상 100자 이하로 입력해주세요.")
+            String content
+    ) {
     }
 
     @GetMapping("/write")
@@ -44,7 +39,7 @@ public class PostController {
     public String write(@ModelAttribute("form") @Valid WriteRequestForm form,
                         BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "write";
         }
 
@@ -52,26 +47,23 @@ public class PostController {
         return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔, GET 요청
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class ModifyRequestForm {
 
-        @Size(min=2, max=10, message = "03-title-제목은 2자 이상 10자 이하로 입력해주세요.")
-        @NotBlank(message = "01-title-제목은 필수입니다.")
-        private String title;
-        @NotBlank(message = "02-content-내용은 필수입니다.")
-        @Size(min=2, max=100, message = "04-content-내용은 2자 이상 100자 이하로 입력해주세요.")
-        private String content;
-
+    record ModifyRequestForm(
+            @Size(min = 2, max = 10, message = "03-title-제목은 2자 이상 10자 이하로 입력해주세요.")
+            @NotBlank(message = "01-title-제목은 필수입니다.")
+            String title,
+            @NotBlank(message = "02-content-내용은 필수입니다.")
+            @Size(min = 2, max = 100, message = "04-content-내용은 2자 이상 100자 이하로 입력해주세요.")
+            String content
+    ) {
     }
 
     @GetMapping("/{id}/modify")
     @Transactional(readOnly = true)
-    public String modifyForm(@PathVariable int id, @ModelAttribute("form") ModifyRequestForm form) {
+    public String modifyForm(@PathVariable int id, Model model) {
         Post post = postService.findById(id).get();
-
-        form.title = post.getTitle();
-        form.content = post.getContent();
+        ModifyRequestForm modifyRequestForm = new ModifyRequestForm(post.getTitle(), post.getContent());
+        model.addAttribute("form", modifyRequestForm);
 
         return "modify";
     }
@@ -82,15 +74,13 @@ public class PostController {
                          @ModelAttribute("form") @Valid WriteRequestForm form,
                          BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "modify";
         }
 
         Post post = postService.modify(id, form.title, form.content);
         return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔, GET 요청
     }
-
-
 
 
     @GetMapping("")

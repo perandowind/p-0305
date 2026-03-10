@@ -19,6 +19,10 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 
 logging:
   level:
